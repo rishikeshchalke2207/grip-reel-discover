@@ -16,7 +16,7 @@ interface ReelPlayerProps {
 
 const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [reachedEnd, setReachedEnd] = useState(false);
   const [direction, setDirection] = useState(0);
