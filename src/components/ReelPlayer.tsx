@@ -70,10 +70,12 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
   // Also support mouse drag for desktop
   const mouseStartY = useRef(0);
   const isDragging = useRef(false);
+  const hasDragged = useRef(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     mouseStartY.current = e.clientY;
     isDragging.current = true;
+    hasDragged.current = false;
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
@@ -81,12 +83,33 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
     isDragging.current = false;
     const deltaY = e.clientY - mouseStartY.current;
     if (Math.abs(deltaY) > 50) {
+      hasDragged.current = true;
       if (deltaY < 0) goToVideo(1);
       else goToVideo(-1);
     }
   };
 
-  const embedUrl = `https://www.youtube.com/embed/${currentVideo.id}?autoplay=1&mute=${muted ? 1 : 0}&loop=1&playlist=${currentVideo.id}&controls=0&rel=0&modestbranding=1&playsinline=1`;
+  const handleOverlayClick = () => {
+    if (hasDragged.current) return;
+    setPaused((p) => !p);
+    setShowPauseIcon(true);
+    setTimeout(() => setShowPauseIcon(false), 800);
+  };
+
+  // Touch tap detection
+  const touchMoved = useRef(false);
+  const handleTouchStartWrapped = (e: React.TouchEvent) => {
+    touchMoved.current = false;
+    handleTouchStart(e);
+  };
+  const handleTouchEndWrapped = (e: React.TouchEvent) => {
+    const deltaY = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+    if (deltaY > 20) touchMoved.current = true;
+    handleTouchEnd(e);
+    if (!touchMoved.current) handleOverlayClick();
+  };
+
+  const embedUrl = `https://www.youtube.com/embed/${currentVideo.id}?autoplay=${paused ? 0 : 1}&mute=${muted ? 1 : 0}&loop=1&playlist=${currentVideo.id}&controls=0&rel=0&modestbranding=1&playsinline=1`;
 
   const variants = {
     enter: (dir: number) => ({ y: dir > 0 ? "100%" : "-100%", opacity: 0 }),
