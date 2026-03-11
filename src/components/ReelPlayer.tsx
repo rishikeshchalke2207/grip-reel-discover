@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, ChevronLeft } from "lucide-react";
 import BottomNavBar from "./BottomNavBar";
 
@@ -21,6 +21,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [direction, setDirection] = useState(0);
   const touchStartY = useRef(0);
+  const touchStartTime = useRef(0);
 
   const currentVideo = videoTitles[currentIndex];
 
@@ -49,9 +50,38 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
     [currentIndex]
   );
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
-    if (info.offset.y < -50) goToVideo(1);
-    else if (info.offset.y > 50) goToVideo(-1);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    const deltaTime = Date.now() - touchStartTime.current;
+    // Require minimum 50px swipe or fast flick
+    if (Math.abs(deltaY) > 50 || (Math.abs(deltaY) > 20 && deltaTime < 300)) {
+      if (deltaY < 0) goToVideo(1);   // swipe up → next
+      else goToVideo(-1);              // swipe down → prev
+    }
+  };
+
+  // Also support mouse drag for desktop
+  const mouseStartY = useRef(0);
+  const isDragging = useRef(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseStartY.current = e.clientY;
+    isDragging.current = true;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const deltaY = e.clientY - mouseStartY.current;
+    if (Math.abs(deltaY) > 50) {
+      if (deltaY < 0) goToVideo(1);
+      else goToVideo(-1);
+    }
   };
 
   const embedUrl = `https://www.youtube.com/embed/${currentVideo.id}?autoplay=1&mute=${muted ? 1 : 0}&loop=1&playlist=${currentVideo.id}&controls=0&rel=0&modestbranding=1&playsinline=1`;
@@ -68,16 +98,16 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed inset-0 z-[100] bg-background flex flex-col dark"
+      className="fixed inset-0 z-[100] flex flex-col"
       style={{ backgroundColor: "#000" }}
     >
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 pt-[env(safe-area-inset-top,12px)] py-3">
         <button onClick={onClose} className="p-1">
-          <ChevronLeft size={24} className="text-primary-foreground" style={{ color: "#fff" }} />
+          <ChevronLeft size={24} style={{ color: "#fff" }} />
         </button>
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1 rounded-full bg-muted/30 backdrop-blur-md flex items-center gap-1">
+          <div className="px-3 py-1 rounded-full flex items-center gap-1" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>
             <span className="text-xs" style={{ color: "#fff" }}>हि</span>
             <span className="text-xs" style={{ color: "#fff" }}>|</span>
             <span className="text-xs font-medium" style={{ color: "#fff" }}>En</span>
@@ -89,13 +119,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
       </div>
 
       {/* Video area */}
-      <motion.div
-        className="flex-1 relative overflow-hidden"
-        drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.2}
-        onDragEnd={handleDragEnd}
-      >
+      <div className="flex-1 relative overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentIndex}
@@ -117,6 +141,15 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           </motion.div>
         </AnimatePresence>
 
+        {/* Transparent touch overlay to capture swipes over iframe */}
+        <div
+          className="absolute inset-0 z-10"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+        />
+
         {/* Swipe hint overlay */}
         <AnimatePresence>
           {showSwipeHint && (
@@ -124,7 +157,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none"
+              className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none"
             >
               <motion.div
                 animate={{ y: [0, -15, 0] }}
@@ -145,15 +178,15 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+              className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
-              <p className="text-sm px-4 py-2 rounded-full bg-muted/30 backdrop-blur-md" style={{ color: "#fff" }}>
+              <p className="text-sm px-4 py-2 rounded-full" style={{ color: "#fff", backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}>
                 You've reached the end
               </p>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* Bottom controls */}
       <div className="relative z-20 px-4 pb-2" style={{ backgroundColor: "rgba(0,0,0,0.8)" }}>
