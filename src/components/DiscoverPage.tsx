@@ -1,4 +1,5 @@
-import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart } from "lucide-react";
+import { useState } from "react";
+import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
 import PipVideo from "./PipVideo";
@@ -25,6 +26,8 @@ const bondShorts = [
 ];
 
 const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
+  const [pipClosed, setPipClosed] = useState(false);
+
   return (
     <div className="relative min-h-screen pb-20 bg-background">
       {/* Header */}
@@ -36,6 +39,15 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </h1>
         </div>
         <div className="flex items-center gap-3">
+          {pipClosed && (
+            <button
+              onClick={onOpenReel}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold transition-all hover:opacity-90"
+            >
+              <Play size={12} fill="currentColor" />
+              Learn
+            </button>
+          )}
           <Bell size={20} className="text-foreground" />
           <img
             src={profileAvatar}
@@ -67,7 +79,6 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
         <Button className="w-full max-w-xs mx-auto h-12 rounded-full text-base font-semibold bg-primary text-primary-foreground">
           Get Started <ArrowRight size={18} className="ml-1" />
         </Button>
-        {/* Carousel dots */}
         <div className="flex items-center justify-center gap-2 mt-5">
           <div className="w-6 h-2 rounded-full bg-primary" />
           <div className="w-2 h-2 rounded-full bg-border" />
@@ -95,10 +106,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           <p className="text-xs text-muted-foreground mb-4">Fixed-return options for every goal</p>
           <div className="grid grid-cols-2 gap-3">
             {investmentOptions.map((opt) => (
-              <div
-                key={opt.name}
-                className="grip-shadow-card rounded-xl bg-background border border-border p-4 flex flex-col"
-              >
+              <div key={opt.name} className="grip-shadow-card rounded-xl bg-background border border-border p-4 flex flex-col">
                 <span className="text-2xl mb-2">{opt.emoji}</span>
                 <h4 className="font-semibold text-foreground text-sm">{opt.name}</h4>
                 <p className="text-xs text-muted-foreground">{opt.desc}</p>
@@ -284,7 +292,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
       </div>
 
       {/* PiP Video */}
-      <PipVideo onExpand={onOpenReel} />
+      <PipVideo onExpand={onOpenReel} onClose={() => setPipClosed(true)} />
 
       {/* Bottom Nav */}
       <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "learn") onOpenReel(); }} />
