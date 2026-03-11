@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeX, ChevronLeft } from "lucide-react";
+import { Volume2, VolumeX, ChevronLeft, Play, Pause } from "lucide-react";
 import BottomNavBar from "./BottomNavBar";
 
 const videoTitles = [
