@@ -166,14 +166,30 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Transparent touch overlay to capture swipes over iframe */}
+        {/* Transparent touch overlay to capture swipes + tap to pause */}
         <div
-          className="absolute inset-0 z-10"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          className="absolute inset-0 z-10 cursor-pointer"
+          onTouchStart={handleTouchStartWrapped}
+          onTouchEnd={handleTouchEndWrapped}
           onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
+          onMouseUp={(e) => { handleMouseUp(e); if (!hasDragged.current) handleOverlayClick(); }}
         />
+
+        {/* Play/Pause icon indicator */}
+        <AnimatePresence>
+          {showPauseIcon && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+            >
+              <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                {paused ? <Play size={32} style={{ color: "#fff" }} /> : <Pause size={32} style={{ color: "#fff" }} />}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Swipe hint overlay */}
         <AnimatePresence>
