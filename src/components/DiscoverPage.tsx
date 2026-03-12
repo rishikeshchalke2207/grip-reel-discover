@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, Play } from "lucide-react";
+import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
 import PipVideo from "./PipVideo";
@@ -7,6 +7,7 @@ import sebiBadge from "@/assets/sebi-badge.png";
 import kycFaceScan from "@/assets/kyc-face-scan.png";
 import rmAnanya from "@/assets/rm-ananya.png";
 import profileAvatar from "@/assets/profile-avatar.png";
+import { bondVideos } from "@/data/bondVideos";
 
 interface DiscoverPageProps {
   onOpenReel: () => void;
@@ -19,15 +20,15 @@ const investmentOptions = [
   { name: "Fixed Deposits", desc: "Upto 8.7%", emoji: "🏦" },
 ];
 
-const bondShorts = [
-  { title: "Are Liquid Funds Better?", color: "from-grip-teal/20 to-grip-teal/5" },
-  { title: "What Are Securitised Debt I...", color: "from-grip-navy/10 to-grip-navy/5" },
-  { title: "New Tax Sovereign...", color: "from-grip-yellow/20 to-grip-yellow/5" },
+const shortColors = [
+  "from-grip-teal/20 to-grip-teal/5",
+  "from-grip-navy/10 to-grip-navy/5",
+  "from-grip-yellow/20 to-grip-yellow/5",
+  "from-grip-teal/10 to-grip-navy/5",
+  "from-grip-yellow/10 to-grip-teal/5",
 ];
 
 const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
-  const [pipClosed, setPipClosed] = useState(false);
-
   return (
     <div className="relative min-h-screen pb-20 bg-background">
       {/* Header */}
@@ -39,15 +40,6 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          {pipClosed && (
-            <button
-              onClick={onOpenReel}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold transition-all hover:opacity-90"
-            >
-              <Play size={12} fill="currentColor" />
-              Learn
-            </button>
-          )}
           <Bell size={20} className="text-foreground" />
           <img
             src={profileAvatar}
@@ -253,13 +245,13 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </div>
           <div className="overflow-x-auto -mx-4 px-4">
             <div className="flex gap-3 w-max">
-              {bondShorts.map((short, i) => (
+              {bondVideos.map((video, i) => (
                 <div
-                  key={i}
-                  className={`w-[140px] h-[200px] rounded-xl bg-gradient-to-b ${short.color} border border-border flex items-end p-3 cursor-pointer`}
+                  key={video.id}
+                  className={`w-[140px] h-[200px] rounded-xl bg-gradient-to-b ${shortColors[i % shortColors.length]} border border-border flex items-end p-3 cursor-pointer`}
                   onClick={onOpenReel}
                 >
-                  <p className="text-xs font-medium text-foreground line-clamp-2">{short.title}</p>
+                  <p className="text-xs font-medium text-foreground line-clamp-2">{video.title}</p>
                 </div>
               ))}
             </div>
@@ -292,7 +284,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
       </div>
 
       {/* PiP Video */}
-      <PipVideo onExpand={onOpenReel} onClose={() => setPipClosed(true)} />
+      <PipVideo onExpand={onOpenReel} onClose={() => {}} />
 
       {/* Bottom Nav */}
       <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "learn") onOpenReel(); }} />
