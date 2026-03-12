@@ -260,7 +260,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           <div
             className="w-3 h-3 rounded-full -mt-2 relative"
             style={{
-              backgroundColor: "hsl(160 100% 39%)",
+              backgroundColor: "hsl(180 100% 36%)",
               marginLeft: `calc(${((currentIndex + 1) / bondVideos.length) * 100}% - 6px)`,
             }}
           />
