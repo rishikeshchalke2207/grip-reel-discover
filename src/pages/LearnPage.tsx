@@ -75,48 +75,45 @@ const LearnPage = () => {
   const videos = activeTab === "bond101" ? bond101Videos : advancedVideos;
   const isAdvanced = activeTab === "advanced";
 
-  // Split into two columns for staggered layout
-  const leftCol = videos.filter((_, i) => i % 2 === 0);
-  const rightCol = videos.filter((_, i) => i % 2 === 1);
-
-  const cardHeights = [160, 240, 200, 160, 240];
-  const leftHeights = cardHeights.filter((_, i) => i % 2 === 0);
-  const rightHeights = cardHeights.filter((_, i) => i % 2 === 1);
-
   const handleNavChange = (tab: string) => {
     if (tab === "discover") navigate("/");
     else if (tab === "invest") navigate("/bonds");
   };
 
-  // Full-screen single video player
+  // Full-screen single video player (reel-style, no scroll)
   if (playingVideo) {
     return (
-      <div className="fixed inset-0 z-[200] flex flex-col" style={{ backgroundColor: "#000" }}>
-        <div className="flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3">
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-0 z-[200] flex flex-col"
+        style={{ backgroundColor: "#000" }}
+      >
+        <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3">
           <button onClick={() => setPlayingVideo(null)} className="p-1">
             <ChevronLeft size={24} style={{ color: "#fff" }} />
           </button>
           <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>
-            Back to Learn
+            Back
           </span>
         </div>
-        <div className="flex-1 flex flex-col">
-          <div className="w-full aspect-video">
-            <iframe
-              src={`https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-              className="w-full h-full border-0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              title={playingVideo.title}
-            />
-          </div>
-          <div className="px-4 mt-4">
-            <h2 className="text-base font-bold" style={{ color: "#fff" }}>
-              {playingVideo.title}
-            </h2>
-          </div>
+        <div className="flex-1 relative">
+          <iframe
+            src={`https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=1`}
+            className="absolute inset-0 w-full h-full border-0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title={playingVideo.title}
+          />
         </div>
-      </div>
+        <div className="px-4 py-4" style={{ backgroundColor: "rgba(0,0,0,0.85)" }}>
+          <h2 className="text-base font-bold" style={{ color: "#fff" }}>
+            {playingVideo.title}
+          </h2>
+        </div>
+      </motion.div>
     );
   }
 
@@ -183,82 +180,45 @@ const LearnPage = () => {
           transition={{ duration: 0.25 }}
           className="px-4 mt-4"
         >
-          <div className="flex gap-2">
-            {/* Left column */}
-            <div className="flex-1 flex flex-col gap-2">
-              {leftCol.map((video, i) => (
-                <button
-                  key={video.id}
-                  onClick={() => setPlayingVideo(video)}
-                  className="relative rounded-xl overflow-hidden w-full"
-                  style={{ height: leftHeights[i] }}
-                >
-                  <img
-                    src={video.thumb}
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  {isAdvanced && (
-                    <span
-                      className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                    >
-                      Advanced
-                    </span>
-                  )}
-                  <div className="absolute top-2 right-2 opacity-60">
-                    <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
-                      GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
-                    </span>
+          <div className="grid grid-cols-2 gap-2">
+            {videos.map((video) => (
+              <button
+                key={video.id}
+                onClick={() => setPlayingVideo(video)}
+                className="relative rounded-xl overflow-hidden w-full aspect-[3/4]"
+              >
+                <img
+                  src={video.thumb}
+                  alt={video.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {isAdvanced && (
+                  <span
+                    className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: "#F5A623", color: "#fff" }}
+                  >
+                    Advanced
+                  </span>
+                )}
+                <div className="absolute top-2 right-2 opacity-60">
+                  <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
+                    GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
+                  </span>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.25)" }}>
+                    <Play size={18} style={{ color: "#fff" }} fill="#fff" />
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
-                      {video.title}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Right column - offset by 24px */}
-            <div className="flex-1 flex flex-col gap-2 mt-6">
-              {rightCol.map((video, i) => (
-                <button
-                  key={video.id}
-                  onClick={() => setPlayingVideo(video)}
-                  className="relative rounded-xl overflow-hidden w-full"
-                  style={{ height: rightHeights[i] }}
-                >
-                  <img
-                    src={video.thumb}
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  {isAdvanced && (
-                    <span
-                      className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                    >
-                      Advanced
-                    </span>
-                  )}
-                  <div className="absolute top-2 right-2 opacity-60">
-                    <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
-                      GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
-                      {video.title}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
+                    {video.title}
+                  </p>
+                </div>
+              </button>
+            ))}
           </div>
 
           {/* CTAs */}
