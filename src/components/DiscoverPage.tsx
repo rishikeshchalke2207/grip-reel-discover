@@ -40,6 +40,9 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </h1>
         </div>
         <div className="flex items-center gap-3">
+          <a href="/learn" className="p-1">
+            <BookOpen size={20} className="text-foreground" />
+          </a>
           <Bell size={20} className="text-foreground" />
           <img
             src={profileAvatar}
