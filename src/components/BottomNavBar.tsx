@@ -50,7 +50,7 @@ const BottomNavBar = ({ activeTab, onTabChange, dark = false }: BottomNavBarProp
                     ? "text-muted-foreground"
                     : "text-muted-foreground"
                 }
-                fill={isActive ? (dark ? "hsl(160 100% 39%)" : "hsl(222 78% 21%)") : "none"}
+                fill={isActive ? (dark ? "hsl(180 100% 36%)" : "hsl(222 78% 21%)") : "none"}
               />
             </div>
             <span

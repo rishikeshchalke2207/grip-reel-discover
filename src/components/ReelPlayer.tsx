@@ -142,7 +142,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
             <span className="text-xs font-medium" style={{ color: "#fff" }}>En</span>
           </div>
           <span className="text-lg font-bold tracking-wider" style={{ color: "rgba(255,255,255,0.6)" }}>
-            GR<span style={{ color: "hsl(160 100% 39%)" }}>i</span>P
+            GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
           </span>
         </div>
       </div>
@@ -254,13 +254,13 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
         <div className="w-full h-1 rounded-full mb-3" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ backgroundColor: "hsl(160 100% 39%)", width: `${((currentIndex + 1) / bondVideos.length) * 100}%` }}
+            style={{ backgroundColor: "hsl(180 100% 36%)", width: `${((currentIndex + 1) / bondVideos.length) * 100}%` }}
             transition={{ duration: 0.3 }}
           />
           <div
             className="w-3 h-3 rounded-full -mt-2 relative"
             style={{
-              backgroundColor: "hsl(160 100% 39%)",
+              backgroundColor: "hsl(180 100% 36%)",
               marginLeft: `calc(${((currentIndex + 1) / bondVideos.length) * 100}% - 6px)`,
             }}
           />
