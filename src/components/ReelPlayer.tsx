@@ -254,7 +254,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
         <div className="w-full h-1 rounded-full mb-3" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ backgroundColor: "hsl(160 100% 39%)", width: `${((currentIndex + 1) / bondVideos.length) * 100}%` }}
+            style={{ backgroundColor: "hsl(180 100% 36%)", width: `${((currentIndex + 1) / bondVideos.length) * 100}%` }}
             transition={{ duration: 0.3 }}
           />
           <div
