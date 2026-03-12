@@ -290,7 +290,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
       <PipVideo onExpand={onOpenReel} onClose={() => {}} />
 
       {/* Bottom Nav */}
-      <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "learn") window.location.href = "/learn"; }} />
+      <BottomNavBar activeTab="discover" onTabChange={() => {}} />
     </div>
   );
 };
