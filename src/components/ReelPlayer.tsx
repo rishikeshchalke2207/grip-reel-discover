@@ -1,31 +1,27 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, ChevronLeft, Play, Pause } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import BottomNavBar from "./BottomNavBar";
-
-const videoTitles = [
-  { id: "bE4YW71-u5k", title: "TDS on Bonds in Budget 2026 — New Rule Explained" },
-  { id: "xoQp_3tYPgA", title: "What Are Securitised Debt Instruments?" },
-  { id: "jeYubCCwy0o", title: "New Tax Benefits on Sovereign Gold Bonds" },
-  { id: "6QGB42_xaZs", title: "Are Liquid Funds Better Than FDs?" },
-];
+import { bondVideos } from "@/data/bondVideos";
 
 interface ReelPlayerProps {
   onClose: () => void;
 }
 
 const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [muted, setMuted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [showPauseIcon, setShowPauseIcon] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
-  const [reachedEnd, setReachedEnd] = useState(false);
+  const [showEndCTA, setShowEndCTA] = useState(false);
   const [direction, setDirection] = useState(0);
   const touchStartY = useRef(0);
   const touchStartTime = useRef(0);
 
-  const currentVideo = videoTitles[currentIndex];
+  const currentVideo = bondVideos[currentIndex];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,17 +36,28 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
     (dir: number) => {
       const nextIndex = currentIndex + dir;
       if (nextIndex < 0) return;
-      if (nextIndex >= videoTitles.length) {
-        setReachedEnd(true);
-        setTimeout(() => setReachedEnd(false), 2500);
+      if (nextIndex >= bondVideos.length) {
+        setShowEndCTA(true);
         return;
       }
       setDirection(dir);
       setCurrentIndex(nextIndex);
       setShowSwipeHint(false);
+      setShowEndCTA(false);
     },
     [currentIndex]
   );
+
+  const handleWatchAgain = () => {
+    setShowEndCTA(false);
+    setDirection(-1);
+    setCurrentIndex(0);
+  };
+
+  const handleCheckBonds = () => {
+    onClose();
+    navigate("/bonds");
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -60,14 +67,12 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
   const handleTouchEnd = (e: React.TouchEvent) => {
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
     const deltaTime = Date.now() - touchStartTime.current;
-    // Require minimum 50px swipe or fast flick
     if (Math.abs(deltaY) > 50 || (Math.abs(deltaY) > 20 && deltaTime < 300)) {
-      if (deltaY < 0) goToVideo(1);   // swipe up → next
-      else goToVideo(-1);              // swipe down → prev
+      if (deltaY < 0) goToVideo(1);
+      else goToVideo(-1);
     }
   };
 
-  // Also support mouse drag for desktop
   const mouseStartY = useRef(0);
   const isDragging = useRef(false);
   const hasDragged = useRef(false);
@@ -96,7 +101,6 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
     setTimeout(() => setShowPauseIcon(false), 800);
   };
 
-  // Touch tap detection
   const touchMoved = useRef(false);
   const handleTouchStartWrapped = (e: React.TouchEvent) => {
     touchMoved.current = false;
@@ -166,7 +170,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Transparent touch overlay to capture swipes + tap to pause */}
+        {/* Touch overlay */}
         <div
           className="absolute inset-0 z-10 cursor-pointer"
           onTouchStart={handleTouchStartWrapped}
@@ -175,7 +179,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           onMouseUp={(e) => { handleMouseUp(e); if (!hasDragged.current) handleOverlayClick(); }}
         />
 
-        {/* Play/Pause icon indicator */}
+        {/* Play/Pause icon */}
         <AnimatePresence>
           {showPauseIcon && (
             <motion.div
@@ -191,7 +195,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           )}
         </AnimatePresence>
 
-        {/* Swipe hint overlay */}
+        {/* Swipe hint */}
         <AnimatePresence>
           {showSwipeHint && (
             <motion.div
@@ -212,18 +216,34 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
           )}
         </AnimatePresence>
 
-        {/* Reached end overlay */}
+        {/* End CTA */}
         <AnimatePresence>
-          {reachedEnd && (
+          {showEndCTA && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+              className="absolute inset-0 flex items-center justify-center z-30"
+              style={{ backgroundColor: "rgba(0,0,0,0.85)" }}
             >
-              <p className="text-sm px-4 py-2 rounded-full" style={{ color: "#fff", backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}>
-                You've reached the end
-              </p>
+              <div className="text-center px-8">
+                <p className="text-xl font-bold mb-6" style={{ color: "#fff" }}>Ready to explore bonds?</p>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={handleCheckBonds}
+                    className="w-full py-3 rounded-full text-sm font-semibold bg-accent text-accent-foreground"
+                  >
+                    Yes — Check out bonds
+                  </button>
+                  <button
+                    onClick={handleWatchAgain}
+                    className="w-full py-3 rounded-full text-sm font-semibold border"
+                    style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff" }}
+                  >
+                    No — Watch videos again
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -231,18 +251,17 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
 
       {/* Bottom controls */}
       <div className="relative z-20 px-4 pb-2" style={{ backgroundColor: "rgba(0,0,0,0.8)" }}>
-        {/* Progress bar */}
         <div className="w-full h-1 rounded-full mb-3" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ backgroundColor: "hsl(160 100% 39%)", width: `${((currentIndex + 1) / videoTitles.length) * 100}%` }}
+            style={{ backgroundColor: "hsl(160 100% 39%)", width: `${((currentIndex + 1) / bondVideos.length) * 100}%` }}
             transition={{ duration: 0.3 }}
           />
           <div
             className="w-3 h-3 rounded-full -mt-2 relative"
             style={{
               backgroundColor: "hsl(160 100% 39%)",
-              marginLeft: `calc(${((currentIndex + 1) / videoTitles.length) * 100}% - 6px)`,
+              marginLeft: `calc(${((currentIndex + 1) / bondVideos.length) * 100}% - 6px)`,
             }}
           />
         </div>
@@ -265,7 +284,6 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
         </div>
       </div>
 
-      {/* Bottom nav */}
       <BottomNavBar activeTab="learn" onTabChange={(tab) => { if (tab !== "learn") onClose(); }} dark />
     </motion.div>
   );
