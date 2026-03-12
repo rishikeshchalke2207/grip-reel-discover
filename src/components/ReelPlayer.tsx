@@ -142,7 +142,7 @@ const ReelPlayer = ({ onClose }: ReelPlayerProps) => {
             <span className="text-xs font-medium" style={{ color: "#fff" }}>En</span>
           </div>
           <span className="text-lg font-bold tracking-wider" style={{ color: "rgba(255,255,255,0.6)" }}>
-            GR<span style={{ color: "hsl(160 100% 39%)" }}>i</span>P
+            GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
           </span>
         </div>
       </div>
