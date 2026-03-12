@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, BookOpen } from "lucide-react";
+import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
 import PipVideo from "./PipVideo";
@@ -40,8 +40,12 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/learn" className="p-1">
-            <BookOpen size={20} className="text-foreground" />
+          <a
+            href="/learn"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/15 transition-colors"
+          >
+            <Play size={12} className="text-primary" fill="hsl(222 78% 21%)" />
+            <span className="text-xs font-semibold text-primary">Learn</span>
           </a>
           <Bell size={20} className="text-foreground" />
           <img
