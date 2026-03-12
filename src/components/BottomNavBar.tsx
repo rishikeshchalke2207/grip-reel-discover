@@ -10,7 +10,7 @@ const tabs = [
   { id: "discover", label: "Discover", icon: Compass },
   { id: "invest", label: "Invest", icon: LayoutGrid },
   { id: "quickstart", label: "QuickStart", icon: Zap },
-  { id: "referral", label: "Referral", icon: Gift },
+  { id: "learn", label: "Learn", icon: BookOpen },
   { id: "portfolio", label: "Portfolio", icon: PieChart },
 ];
 
