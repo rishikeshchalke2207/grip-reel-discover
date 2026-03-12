@@ -75,14 +75,6 @@ const LearnPage = () => {
   const videos = activeTab === "bond101" ? bond101Videos : advancedVideos;
   const isAdvanced = activeTab === "advanced";
 
-  // Split into two columns for staggered layout
-  const leftCol = videos.filter((_, i) => i % 2 === 0);
-  const rightCol = videos.filter((_, i) => i % 2 === 1);
-
-  const cardHeights = [160, 240, 200, 160, 240];
-  const leftHeights = cardHeights.filter((_, i) => i % 2 === 0);
-  const rightHeights = cardHeights.filter((_, i) => i % 2 === 1);
-
   const handleNavChange = (tab: string) => {
     if (tab === "discover") navigate("/");
     else if (tab === "invest") navigate("/bonds");
