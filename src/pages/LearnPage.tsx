@@ -180,82 +180,45 @@ const LearnPage = () => {
           transition={{ duration: 0.25 }}
           className="px-4 mt-4"
         >
-          <div className="flex gap-2">
-            {/* Left column */}
-            <div className="flex-1 flex flex-col gap-2">
-              {leftCol.map((video, i) => (
-                <button
-                  key={video.id}
-                  onClick={() => setPlayingVideo(video)}
-                  className="relative rounded-xl overflow-hidden w-full"
-                  style={{ height: leftHeights[i] }}
-                >
-                  <img
-                    src={video.thumb}
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  {isAdvanced && (
-                    <span
-                      className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                    >
-                      Advanced
-                    </span>
-                  )}
-                  <div className="absolute top-2 right-2 opacity-60">
-                    <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
-                      GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
-                    </span>
+          <div className="grid grid-cols-2 gap-2">
+            {videos.map((video) => (
+              <button
+                key={video.id}
+                onClick={() => setPlayingVideo(video)}
+                className="relative rounded-xl overflow-hidden w-full aspect-[3/4]"
+              >
+                <img
+                  src={video.thumb}
+                  alt={video.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {isAdvanced && (
+                  <span
+                    className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: "#F5A623", color: "#fff" }}
+                  >
+                    Advanced
+                  </span>
+                )}
+                <div className="absolute top-2 right-2 opacity-60">
+                  <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
+                    GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
+                  </span>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.25)" }}>
+                    <Play size={18} style={{ color: "#fff" }} fill="#fff" />
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
-                      {video.title}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Right column - offset by 24px */}
-            <div className="flex-1 flex flex-col gap-2 mt-6">
-              {rightCol.map((video, i) => (
-                <button
-                  key={video.id}
-                  onClick={() => setPlayingVideo(video)}
-                  className="relative rounded-xl overflow-hidden w-full"
-                  style={{ height: rightHeights[i] }}
-                >
-                  <img
-                    src={video.thumb}
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  {isAdvanced && (
-                    <span
-                      className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                    >
-                      Advanced
-                    </span>
-                  )}
-                  <div className="absolute top-2 right-2 opacity-60">
-                    <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
-                      GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
-                      {video.title}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
+                    {video.title}
+                  </p>
+                </div>
+              </button>
+            ))}
           </div>
 
           {/* CTAs */}
