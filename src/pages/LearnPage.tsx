@@ -80,35 +80,40 @@ const LearnPage = () => {
     else if (tab === "invest") navigate("/bonds");
   };
 
-  // Full-screen single video player
+  // Full-screen single video player (reel-style, no scroll)
   if (playingVideo) {
     return (
-      <div className="fixed inset-0 z-[200] flex flex-col" style={{ backgroundColor: "#000" }}>
-        <div className="flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3">
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-0 z-[200] flex flex-col"
+        style={{ backgroundColor: "#000" }}
+      >
+        <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3">
           <button onClick={() => setPlayingVideo(null)} className="p-1">
             <ChevronLeft size={24} style={{ color: "#fff" }} />
           </button>
           <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>
-            Back to Learn
+            Back
           </span>
         </div>
-        <div className="flex-1 flex flex-col">
-          <div className="w-full aspect-video">
-            <iframe
-              src={`https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-              className="w-full h-full border-0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              title={playingVideo.title}
-            />
-          </div>
-          <div className="px-4 mt-4">
-            <h2 className="text-base font-bold" style={{ color: "#fff" }}>
-              {playingVideo.title}
-            </h2>
-          </div>
+        <div className="flex-1 relative">
+          <iframe
+            src={`https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=1`}
+            className="absolute inset-0 w-full h-full border-0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title={playingVideo.title}
+          />
         </div>
-      </div>
+        <div className="px-4 py-4" style={{ backgroundColor: "rgba(0,0,0,0.85)" }}>
+          <h2 className="text-base font-bold" style={{ color: "#fff" }}>
+            {playingVideo.title}
+          </h2>
+        </div>
+      </motion.div>
     );
   }
 
