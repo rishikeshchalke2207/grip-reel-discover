@@ -1,4 +1,4 @@
-import { Compass, LayoutGrid, Zap, Play, PieChart } from "lucide-react";
+import { Compass, LayoutGrid, Zap, Gift, PieChart } from "lucide-react";
 
 interface BottomNavBarProps {
   activeTab: string;
