@@ -222,24 +222,8 @@ const LearnPage = () => {
           </div>
 
           {/* CTAs */}
-          <div className="mt-8 space-y-4">
-            {/* CTA 1 — Academy */}
-            <div className="rounded-xl p-5" style={{ backgroundColor: "hsl(var(--grip-card))" }}>
-              <h4 className="font-bold text-foreground text-base">Want to learn more?</h4>
-              <p className="text-xs text-muted-foreground mt-1">
-                Explore our full library of bond education videos
-              </p>
-              <a
-                href="https://www.gripinvest.in/academy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-primary underline underline-offset-2"
-              >
-                Visit Fixed Returns Academy <ArrowRight size={14} />
-              </a>
-            </div>
-
-            {/* CTA 2 — Explore Bonds */}
+          <div className="mt-8 space-y-3">
+            {/* Primary CTA — Explore Bonds */}
             <div
               className="rounded-xl p-5"
               style={{
@@ -256,6 +240,22 @@ const LearnPage = () => {
               >
                 Explore Bonds <ArrowRight size={18} />
               </button>
+            </div>
+
+            {/* Secondary CTA — Academy */}
+            <div className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ backgroundColor: "hsl(var(--grip-card))" }}>
+              <div>
+                <p className="text-xs font-semibold text-foreground">Want to learn more?</p>
+                <p className="text-[11px] text-muted-foreground">Explore our full library of education videos</p>
+              </div>
+              <a
+                href="https://www.gripinvest.in/academy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1"
+              >
+                Academy <ArrowRight size={12} />
+              </a>
             </div>
           </div>
         </motion.div>
