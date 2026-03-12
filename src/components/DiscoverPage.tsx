@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart } from "lucide-react";
+import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
 import PipVideo from "./PipVideo";
@@ -40,6 +40,9 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
           </h1>
         </div>
         <div className="flex items-center gap-3">
+          <a href="/learn" className="p-1">
+            <BookOpen size={20} className="text-foreground" />
+          </a>
           <Bell size={20} className="text-foreground" />
           <img
             src={profileAvatar}
@@ -287,7 +290,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
       <PipVideo onExpand={onOpenReel} onClose={() => {}} />
 
       {/* Bottom Nav */}
-      <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "learn") window.location.href = "/learn"; }} />
+      <BottomNavBar activeTab="discover" onTabChange={() => {}} />
     </div>
   );
 };
