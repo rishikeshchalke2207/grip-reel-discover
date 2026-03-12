@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart } from "lucide-react";
+import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
 import PipVideo from "./PipVideo";
