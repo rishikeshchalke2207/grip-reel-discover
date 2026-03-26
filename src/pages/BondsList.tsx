@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, Search, SlidersHorizontal, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, Search, SlidersHorizontal, ChevronRight, ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
 
