@@ -290,8 +290,6 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
         </section>
       </div>
 
-      {/* PiP Video */}
-      <PipVideo onExpand={onOpenReel} onClose={() => {}} />
 
       {/* Bottom Nav */}
       <BottomNavBar activeTab="discover" onTabChange={() => {}} />
