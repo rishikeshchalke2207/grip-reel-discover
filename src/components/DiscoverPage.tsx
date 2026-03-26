@@ -30,6 +30,7 @@ const shortColors = [
 ];
 
 const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen pb-20 bg-background">
       {/* Header */}
