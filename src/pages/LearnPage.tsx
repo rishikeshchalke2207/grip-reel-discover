@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Bell, ChevronLeft, ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
-import profileAvatar from "@/assets/profile-avatar.png";
 
 const bond101Videos = [
   {
@@ -80,7 +79,6 @@ const LearnPage = () => {
     else if (tab === "invest") navigate("/bonds");
   };
 
-  // Full-screen single video player (reel-style, no scroll)
   if (playingVideo) {
     return (
       <motion.div
@@ -88,7 +86,7 @@ const LearnPage = () => {
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed inset-0 z-[200] flex flex-col"
+        className="fixed inset-y-0 left-1/2 z-[200] flex w-full max-w-[430px] -translate-x-1/2 flex-col"
         style={{ backgroundColor: "#000" }}
       >
         <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3">
@@ -117,7 +115,6 @@ const LearnPage = () => {
     );
   }
 
-  // In-app webview for Academy
   if (academyUrl) {
     return (
       <motion.div
@@ -125,7 +122,7 @@ const LearnPage = () => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed inset-0 z-[200] flex flex-col bg-background"
+        className="fixed inset-y-0 left-1/2 z-[200] flex w-full max-w-[430px] -translate-x-1/2 flex-col bg-background"
       >
         <div className="flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3 border-b border-border">
           <button onClick={() => setAcademyUrl(null)} className="p-1">
@@ -143,144 +140,142 @@ const LearnPage = () => {
   }
 
   return (
-    <div className="max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background overflow-x-hidden">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-30 bg-background px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Menu size={22} className="text-foreground" />
-          <h1 className="text-xl font-bold text-primary">Learn</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Bell size={20} className="text-foreground" />
-            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-destructive" />
+    <div className="min-h-screen bg-muted/30">
+      <div className="w-full max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background overflow-x-hidden">
+        <header className="sticky top-0 z-30 bg-background px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Menu size={22} className="text-foreground" />
+            <h1 className="text-xl font-bold text-primary">Learn</h1>
           </div>
-          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
-            AJ
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Bell size={20} className="text-foreground" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-destructive" />
+            </div>
+            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+              AJ
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Tab Bar */}
-      <div className="px-4 border-b border-border">
-        <div className="flex gap-6">
-          <button
-            onClick={() => setActiveTab("bond101")}
-            className={`pb-3 text-sm font-semibold transition-colors relative ${
-              activeTab === "bond101" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            Bond 101
-            {activeTab === "bond101" && (
-              <motion.div
-                layoutId="tab-underline"
-                className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-primary"
-              />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("advanced")}
-            className={`pb-3 text-sm font-semibold transition-colors relative ${
-              activeTab === "advanced" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            Advanced
-            {activeTab === "advanced" && (
-              <motion.div
-                layoutId="tab-underline"
-                className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-primary"
-              />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Video Grid */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: activeTab === "advanced" ? 20 : -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: activeTab === "advanced" ? -20 : 20 }}
-          transition={{ duration: 0.25 }}
-          className="px-4 mt-4"
-        >
-          <div className="grid grid-cols-2 gap-2">
-            {videos.map((video) => (
-              <button
-                key={video.id}
-                onClick={() => setPlayingVideo(video)}
-                className="relative rounded-xl overflow-hidden w-full aspect-[3/4]"
-              >
-                <img
-                  src={video.thumb}
-                  alt={video.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute top-2 right-2 opacity-60">
-                  <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
-                    GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
-                  </span>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.25)" }}>
-                    <Play size={18} style={{ color: "#fff" }} fill="#fff" />
-                  </div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
-                    {video.title}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* CTAs */}
-          <div className="mt-8 space-y-3">
-            {/* Primary CTA — Explore Bonds */}
-            <div
-              className="rounded-xl p-5"
-              style={{
-                background: "linear-gradient(135deg, hsl(220 80% 95%), hsl(220 80% 91%))",
-              }}
+        <div className="px-4 border-b border-border">
+          <div className="flex gap-6">
+            <button
+              onClick={() => setActiveTab("bond101")}
+              className={`pb-3 text-sm font-semibold transition-colors relative ${
+                activeTab === "bond101" ? "text-primary" : "text-muted-foreground"
+              }`}
             >
-              <h4 className="font-bold text-primary text-lg">
-                Ready to make your first investment?
-              </h4>
-              <button
-                onClick={() => navigate("/bonds")}
-                className="w-full mt-4 flex items-center justify-center gap-2 rounded-[10px] bg-primary text-primary-foreground font-bold text-base"
-                style={{ height: 52 }}
-              >
-                Explore Bonds <ArrowRight size={18} />
-              </button>
-            </div>
-
-            {/* Secondary CTA — Academy */}
-            <div className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ backgroundColor: "hsl(var(--grip-card))" }}>
-              <div>
-                <p className="text-xs font-semibold text-foreground">Want to learn more?</p>
-                <p className="text-[11px] text-muted-foreground">Explore our full library of education videos</p>
-              </div>
-              <button
-                onClick={() => setAcademyUrl("https://www.gripinvest.in/academy")}
-                className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1"
-              >
-                Academy <ArrowRight size={12} />
-              </button>
-            </div>
+              Bond 101
+              {activeTab === "bond101" && (
+                <motion.div
+                  layoutId="tab-underline"
+                  className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-primary"
+                />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab("advanced")}
+              className={`pb-3 text-sm font-semibold transition-colors relative ${
+                activeTab === "advanced" ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              Advanced
+              {activeTab === "advanced" && (
+                <motion.div
+                  layoutId="tab-underline"
+                  className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-primary"
+                />
+              )}
+            </button>
           </div>
-        </motion.div>
-      </AnimatePresence>
+        </div>
 
-      {/* Bottom Nav */}
-      <BottomNavBar activeTab="learn" onTabChange={handleNavChange} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: activeTab === "advanced" ? 20 : -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: activeTab === "advanced" ? -20 : 20 }}
+            transition={{ duration: 0.25 }}
+            className="px-4 mt-4"
+          >
+            <div className="grid grid-cols-2 gap-2">
+              {videos.map((video) => (
+                <button
+                  key={video.id}
+                  onClick={() => setPlayingVideo(video)}
+                  className="relative rounded-xl overflow-hidden w-full aspect-[3/4]"
+                >
+                  <img
+                    src={video.thumb}
+                    alt={video.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute top-2 right-2 opacity-60">
+                    <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
+                      GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: "rgba(255,255,255,0.25)" }}
+                    >
+                      <Play size={18} style={{ color: "#fff" }} fill="#fff" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-xs font-bold line-clamp-2 text-left" style={{ color: "#fff" }}>
+                      {video.title}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-8 space-y-3">
+              <div
+                className="rounded-xl p-5"
+                style={{
+                  background: "linear-gradient(135deg, hsl(220 80% 95%), hsl(220 80% 91%))",
+                }}
+              >
+                <h4 className="font-bold text-primary text-lg">Ready to make your first investment?</h4>
+                <button
+                  onClick={() => navigate("/bonds")}
+                  className="w-full mt-4 flex items-center justify-center gap-2 rounded-[10px] bg-primary text-primary-foreground font-bold text-base"
+                  style={{ height: 52 }}
+                >
+                  Explore Bonds <ArrowRight size={18} />
+                </button>
+              </div>
+
+              <div
+                className="rounded-xl px-4 py-3 flex items-center justify-between"
+                style={{ backgroundColor: "hsl(var(--grip-card))" }}
+              >
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Want to learn more?</p>
+                  <p className="text-[11px] text-muted-foreground">Explore our full library of education videos</p>
+                </div>
+                <button
+                  onClick={() => setAcademyUrl("https://www.gripinvest.in/academy")}
+                  className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1"
+                >
+                  Academy <ArrowRight size={12} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        <BottomNavBar activeTab="learn" onTabChange={handleNavChange} />
+      </div>
     </div>
   );
 };
 
 export default LearnPage;
-
