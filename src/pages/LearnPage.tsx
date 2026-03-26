@@ -219,14 +219,6 @@ const LearnPage = () => {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                {isAdvanced && (
-                  <span
-                    className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                  >
-                    Advanced
-                  </span>
-                )}
                 <div className="absolute top-2 right-2 opacity-60">
                   <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
                     GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
