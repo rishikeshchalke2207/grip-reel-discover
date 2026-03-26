@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, Search, SlidersHorizontal, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, Search, SlidersHorizontal, ChevronRight, ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNavBar from "@/components/BottomNavBar";
 
@@ -107,7 +107,13 @@ const BondsList = () => {
           <h1 className="text-lg font-bold text-foreground">Invest</h1>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-accent bg-accent/10 px-2 py-1 rounded">▶ App</span>
+          <a
+            href="/learn"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/15 transition-colors"
+          >
+            <Play size={12} className="text-primary" fill="hsl(222 78% 21%)" />
+            <span className="text-xs font-semibold text-primary">Learn</span>
+          </a>
           <img
             src="https://ui-avatars.com/api/?name=U&background=1a2e5a&color=fff&size=36&rounded=true"
             alt="Profile"
