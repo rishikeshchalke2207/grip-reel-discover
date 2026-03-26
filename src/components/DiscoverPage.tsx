@@ -292,7 +292,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
 
 
       {/* Bottom Nav */}
-      <BottomNavBar activeTab="discover" onTabChange={() => {}} />
+      <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "invest") navigate("/bonds"); if (tab === "learn") navigate("/learn"); }} />
     </div>
   );
 };
