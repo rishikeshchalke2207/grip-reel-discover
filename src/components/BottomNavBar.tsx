@@ -17,7 +17,7 @@ const tabs = [
 const BottomNavBar = ({ activeTab, onTabChange, dark = false }: BottomNavBarProps) => {
   return (
     <nav
-      className={`fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-2 py-2 pb-[env(safe-area-inset-bottom,8px)] ${
+      className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 flex items-center justify-around px-2 py-2 pb-[env(safe-area-inset-bottom,8px)] ${
         dark ? "bg-grip-dark-nav" : "bg-background border-t border-border"
       }`}
     >
