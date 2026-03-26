@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Bell, ChevronLeft, ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -71,9 +71,9 @@ const LearnPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"bond101" | "advanced">("bond101");
   const [playingVideo, setPlayingVideo] = useState<VideoItem | null>(null);
+  const [academyUrl, setAcademyUrl] = useState<string | null>(null);
 
   const videos = activeTab === "bond101" ? bond101Videos : advancedVideos;
-  const isAdvanced = activeTab === "advanced";
 
   const handleNavChange = (tab: string) => {
     if (tab === "discover") navigate("/");
@@ -117,8 +117,33 @@ const LearnPage = () => {
     );
   }
 
+  // In-app webview for Academy
+  if (academyUrl) {
+    return (
+      <motion.div
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-0 z-[200] flex flex-col bg-background"
+      >
+        <div className="flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3 border-b border-border">
+          <button onClick={() => setAcademyUrl(null)} className="p-1">
+            <ChevronLeft size={24} className="text-foreground" />
+          </button>
+          <span className="text-sm font-semibold text-foreground">Fixed Returns Academy</span>
+        </div>
+        <iframe
+          src={academyUrl}
+          className="flex-1 w-full border-0"
+          title="Fixed Returns Academy"
+        />
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background">
+    <div className="max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background overflow-x-hidden">
       {/* Top Bar */}
       <header className="sticky top-0 z-30 bg-background px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -194,14 +219,6 @@ const LearnPage = () => {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                {isAdvanced && (
-                  <span
-                    className="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#F5A623", color: "#fff" }}
-                  >
-                    Advanced
-                  </span>
-                )}
                 <div className="absolute top-2 right-2 opacity-60">
                   <span className="text-[10px] font-bold tracking-wider" style={{ color: "#fff" }}>
                     GR<span style={{ color: "hsl(180 100% 36%)" }}>i</span>P
@@ -248,14 +265,12 @@ const LearnPage = () => {
                 <p className="text-xs font-semibold text-foreground">Want to learn more?</p>
                 <p className="text-[11px] text-muted-foreground">Explore our full library of education videos</p>
               </div>
-              <a
-                href="https://www.gripinvest.in/academy"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => setAcademyUrl("https://www.gripinvest.in/academy")}
                 className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1"
               >
                 Academy <ArrowRight size={12} />
-              </a>
+              </button>
             </div>
           </div>
         </motion.div>
