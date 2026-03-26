@@ -71,9 +71,9 @@ const LearnPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"bond101" | "advanced">("bond101");
   const [playingVideo, setPlayingVideo] = useState<VideoItem | null>(null);
+  const [academyUrl, setAcademyUrl] = useState<string | null>(null);
 
   const videos = activeTab === "bond101" ? bond101Videos : advancedVideos;
-  const isAdvanced = activeTab === "advanced";
 
   const handleNavChange = (tab: string) => {
     if (tab === "discover") navigate("/");
