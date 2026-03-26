@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Menu, Bell, ChevronRight, Shield, ArrowRight, Heart, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNavBar from "./BottomNavBar";
@@ -29,6 +30,7 @@ const shortColors = [
 ];
 
 const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen pb-20 bg-background">
       {/* Header */}
@@ -292,7 +294,7 @@ const DiscoverPage = ({ onOpenReel }: DiscoverPageProps) => {
 
 
       {/* Bottom Nav */}
-      <BottomNavBar activeTab="discover" onTabChange={() => {}} />
+      <BottomNavBar activeTab="discover" onTabChange={(tab) => { if (tab === "invest") navigate("/bonds"); if (tab === "learn") navigate("/learn"); }} />
     </div>
   );
 };

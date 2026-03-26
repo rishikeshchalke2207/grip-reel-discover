@@ -77,6 +77,7 @@ const LearnPage = () => {
   const handleNavChange = (tab: string) => {
     if (tab === "discover") navigate("/");
     else if (tab === "invest") navigate("/bonds");
+    else if (tab === "learn") navigate("/learn");
   };
 
   if (playingVideo) {

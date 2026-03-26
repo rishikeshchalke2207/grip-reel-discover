@@ -347,7 +347,7 @@ const BondsList = () => {
         </section>
       </div>
 
-      <BottomNavBar activeTab="invest" onTabChange={(tab) => { if (tab === "discover") navigate("/"); }} />
+      <BottomNavBar activeTab="invest" onTabChange={(tab) => { if (tab === "discover") navigate("/"); if (tab === "learn") navigate("/learn"); }} />
     </div>
   );
 };
