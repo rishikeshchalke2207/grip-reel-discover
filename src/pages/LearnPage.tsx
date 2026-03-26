@@ -117,8 +117,33 @@ const LearnPage = () => {
     );
   }
 
+  // In-app webview for Academy
+  if (academyUrl) {
+    return (
+      <motion.div
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-0 z-[200] flex flex-col bg-background"
+      >
+        <div className="flex items-center gap-3 px-4 pt-[env(safe-area-inset-top,12px)] py-3 border-b border-border">
+          <button onClick={() => setAcademyUrl(null)} className="p-1">
+            <ChevronLeft size={24} className="text-foreground" />
+          </button>
+          <span className="text-sm font-semibold text-foreground">Fixed Returns Academy</span>
+        </div>
+        <iframe
+          src={academyUrl}
+          className="flex-1 w-full border-0"
+          title="Fixed Returns Academy"
+        />
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background">
+    <div className="max-w-[430px] mx-auto relative min-h-screen pb-20 bg-background overflow-x-hidden">
       {/* Top Bar */}
       <header className="sticky top-0 z-30 bg-background px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
