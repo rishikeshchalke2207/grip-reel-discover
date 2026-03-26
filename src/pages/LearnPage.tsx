@@ -265,14 +265,12 @@ const LearnPage = () => {
                 <p className="text-xs font-semibold text-foreground">Want to learn more?</p>
                 <p className="text-[11px] text-muted-foreground">Explore our full library of education videos</p>
               </div>
-              <a
-                href="https://www.gripinvest.in/academy"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => setAcademyUrl("https://www.gripinvest.in/academy")}
                 className="shrink-0 text-xs font-semibold text-primary flex items-center gap-1"
               >
                 Academy <ArrowRight size={12} />
-              </a>
+              </button>
             </div>
           </div>
         </motion.div>
